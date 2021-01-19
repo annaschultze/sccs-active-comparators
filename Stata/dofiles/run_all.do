@@ -24,8 +24,11 @@ pwd
 
 /* Run all files==============================================================*/ 
 
-do dofiles\00_data_exploration.do
-do dofiles\01_data_management.do
+do dofiles\00a_data_exploration.do
+do dofiles\00b_create_merged_analysis_file.do
+do dofiles\01_descriptive_data_management.do
 do dofiles\02_descriptive_statistics.do
 do dofiles\03_reproduce_analyses.do
+do dofiles\04a_active_comparator_simple.do
+do dofiles\04b_active_comparator_interaction.do
 
