@@ -15,7 +15,8 @@ DATASETS CREATED:	 None.
 
 DEPENDENCIES: 		 00_data_preparation.do  
 OTHER OUTPUT: 		 table2.txt (directed to output folder)
-					 log file (directed to log folder)		
+					 log file (directed to log folder)
+EDITS: 				 change to run only on merged dataset (19 Jan 2021)
 ==============================================================================*/
 
 /* Housekeeping===============================================================*/ 
@@ -38,58 +39,64 @@ file write tablecontent _tab ("Number of Fractures") _tab ("Personyears of Follo
 /* Glitazones=================================================================*/ 
 file write tablecontent "Thiazolidinediones" _tab 
 
-use "$Datadir\glitazone_analysis_file"
+use "$Datadir\merged_analysis_file"
+
+* generate total FU and events by drug exposure 
+sort gli_exgr
+by gli_exgr: egen gli_days=total(interval)
+gen gli_years = gli_days/365.25
+by gli_exgr: egen gli_totalevents=total(nevents)
+by gli_exgr: tab gli_totalevents gli_years
 
 * Unexposed row 
-summarize totalevents if exgr == 0 
+summarize gli_totalevents if gli_exgr == 0 
 file write tablecontent (r(min)) _tab 
 
-summarize years if exgr == 0 
+summarize gli_years if gli_exgr == 0 
 file write tablecontent (r(min)) _tab 
 
 file write tablecontent ("Baseline") _n
 
 * Exposed row and effect estimates 
 
-summarize totalevents if exgr == 1 
+summarize gli_totalevents if gli_exgr == 1 
 file write tablecontent _tab (r(min)) _tab 
 
-summarize years if exgr == 1 
+summarize gli_years if gli_exgr == 1 
 file write tablecontent (r(min)) _tab 
 
-xi: xtpoisson nevents i.exgr i.agegr, fe i(indiv) offset(loginterval) irr
+xi: xtpoisson nevents i.gli_exgr i.agegr, fe i(indiv) offset(loginterval) irr
 file write tablecontent (round(r(table)[1,1]),0.01) _tab 
 file write tablecontent (r(table)[2,1]) _tab 
 file write tablecontent (round(r(table)[5,1]),0.01) (" - ") (round(r(table)[6,1]),0.01) _n
 
 /* Sulphonylureas=============================================================*/
 file write tablecontent "Sulphonylureas" _tab 
-use "$Datadir\SU_analysis_file"
 
-sort exgr
-by exgr: egen days=total(interval)
-gen years = days/365.25
-by exgr: egen totalevents=total(nevents)
-by exgr: tab totalevents years
+sort su_exgr
+by su_exgr: egen su_days=total(interval)
+gen su_years = su_days/365.25
+by su_exgr: egen su_totalevents=total(nevents)
+by su_exgr: tab su_totalevents su_years
 
 * Unexposed row 
-summarize totalevents if exgr == 0 
+summarize su_totalevents if su_exgr == 0 
 file write tablecontent (r(min)) _tab 
 
-summarize years if exgr == 0 
+summarize su_years if su_exgr == 0 
 file write tablecontent (r(min)) _tab 
 
 file write tablecontent ("Baseline") _n
 
 * Exposed row and effect estimates 
 
-summarize totalevents if exgr == 1 
+summarize su_totalevents if su_exgr == 1 
 file write tablecontent _tab (r(min)) _tab 
 
-summarize years if exgr == 1 
+summarize su_years if su_exgr == 1 
 file write tablecontent (r(min)) _tab 
 
-xi: xtpoisson nevents i.exgr i.agegr, fe i(indiv) offset(loginterval) irr
+xi: xtpoisson nevents i.su_exgr i.agegr, fe i(indiv) offset(loginterval) irr
 file write tablecontent (round(r(table)[1,1]),0.01) _tab 
 file write tablecontent (r(table)[2,1]) _tab 
 file write tablecontent (round(r(table)[5,1]),0.01) (" - ") (round(r(table)[6,1]),0.01) _n
