@@ -7,7 +7,13 @@ VERSION:			 Stata 16.1
 
 DESCRIPTION OF FILE: This modifies code to create two interim datasets for SUL and
 					 GLI analyses. 
-					 These are then merged, and remaining data management done on this file. 					 
+					 These are then merged, and remaining data management done on this file. 				
+					 This - rather than simply appending datasets - is required 
+					 due to the age split. Where patients are exposed to say, 6 months 
+					 of gli and 1 month of SU during a calendar year appending the datasets s
+					 will results in duplication of rows. To ensure these are split appropriately, 
+					 the split needs to occur after the exposure periods have been determined, 
+					 which necessitates re-shaping the raw files. 
 DEPENDENCIES: 		 Do file 00  					 
 DATASETS USED:		 All in $Datadir; additional ones read from $Rawdir based 
 					 on old code are: 
@@ -240,7 +246,7 @@ bysort indiv: gen counter = _n
 reshape wide eventday, i(indiv) j(counter)
 
 merge 1:1 indiv using "$Datadir\SU_analysis_file_interim_wide"
-  
+ 
 gen analysis = "GLI" if _merge == 1 
 replace analysis = "SUL" if _merge == 2
 replace analysis = "ALL" if _merge == 3
@@ -248,8 +254,13 @@ drop _merge
 
 gen flag = 1 if cutp60 != cutp2 & cutp60 != .
 
+* censor at initiation of the other drug, if already expsosed to one drug 
+replace cutp2 = cutp58 if cutp57 != . & cutp58 < cutp57  
+replace cutp2 = cutp56 if cutp60 != . & cutp56 < cutp60 
+
 * censor at earliest discontinuation of any discontinuation 
-replace cutp2 = cutp60 if cutp60 != . & cutp60 < cutp2 
+replace cutp60 = cutp2 if cutp2 < cutp60 & cutp60 != . 
+replace cutp57 = cutp2 if cutp2 < cutp57 & cutp57 != . 
 
 * reshape eventday to long again 
 reshape long eventday, i(indiv) j(eventnumber)
@@ -365,10 +376,14 @@ by indiv: replace su_exgr =  1 if su_exgr[_n-1] != . & su_exgr >= .
 
 ** now replace everything else with zeroes 
 replace su_exgr = 0 if su_exgr == .
- 
+
 ** drop those with unnecessary intervals 
 drop if interval == 0 | interval == .
 generate loginterval = log(interval)
+
+** drop those who no longer have outcomes during the follow-up due to the earlier censoring 
+bysort indiv: egen any_event = sum(nevents)
+drop if any_event == 0 
 
 * create indicator variable for exposure to either drug 
 gen any = 1 if gli_exgr == 1 | su_exgr == 1 

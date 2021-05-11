@@ -1,19 +1,19 @@
 Table 1: Demographic and Clinical Characteristics
 Total
-	1845
+	1536
 Gender
-2	      838 (45.4)	
+2	      717 (46.7)	
 Age at Exposure
-Median (IQR)	56 (46-64)
-Mean (SD)	55.84 (12.55)
+Median (IQR)	54 (46-64)
+Mean (SD)	54.76 (12.57)
 Min, Max	26, 96
 
 Glitazone Exposed
-1	    1,632 (88.5)	
+1	      790 (51.4)	
 Sulphonylurea Exposed
-1	    1,037 (56.2)	
+1	      527 (34.3)	
 Number of Fractures
-1	    1,545 (83.7)	
-2	      234 (12.7)	
-3	       46 (2.5)	
-4	       17 (0.9)	
+1	    1,307 (85.1)	
+2	      181 (11.8)	
+3	       35 (2.3)	
+4	       11 (0.7)	

@@ -1,7 +1,14 @@
 Table 3Active ComparatorInteraction
 	Model	GLI - Rate Ratio	95%CI	SU - Rate Ratio	95%CI	ANY - Rate Ratio	95%CI	Interaction Term	95%CI
-Model 1: Exposure = Glitazones	1.43	1.24 - 1.64
-Model 2: Exposure = Sulphonylureas			.85	.71 - 1.01
-Model 3: Exposure = Any drug (either GLI or SU)					1.23	1.07 - 1.42
-Model 4: Exposure = Any drug + Glitazones	1.43	1.2 - 1.69		1	.84 - 1.19
-Model 5: Exposure = Any drug + Glitazones + Any drug * Glitazones	1.43	1.2 - 1.69		1	.84 - 1.19
+UNADJUSTED
+Model 1: Exposure = Glitazones	2.35	2.02 - 2.74
+Model 2: Exposure = Sulphonylureas			1.23	.99 - 1.52
+Model 3: Exposure = Any drug (either GLI or SU)					1.88	1.66 - 2.13
+Model 4: Exposure = Any drug + Glitazones * Any drug Interaction Term								1.92	1.48 - 2.5
+Model 5: Exposure = Any drug + Manually Created Product Term								1.92	1.48 - 2.5
+ADJUSTED
+Model 1: Exposure = Glitazones	1.69	1.41 - 2.01
+Model 2: Exposure = Sulphonylureas			.8	.64 - 1.01
+Model 3: Exposure = Any drug (either GLI or SU)					1.35	1.15 - 1.58
+Model 4: Exposure = Any drug + Glitazones * Any drug Interaction Term								1.82	1.39 - 2.37
+Model 5: Exposure = Any drug + Manually Created Product Term								1.82	1.39 - 2.37
