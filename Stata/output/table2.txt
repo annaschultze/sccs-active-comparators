@@ -1,6 +1,6 @@
 Table 2: Reproduction of results from the paper
 	Number of Fractures	Personyears of Follow-up	Age-adjusted Rate Ratio	Standard Error	95%CI
-Thiazolidinediones	1549	16920.156	Baseline
-	687	3681.9822	1.43	.09982506	1.24 - 1.64
-Sulphonylureas	1536	15600.102	Baseline
-	700	5002.0371	.85	.07557326	.71 - 1.01
+Thiazolidinediones	1483	14771.608	Baseline
+	346	1784.4573	1.69	.1523438	1.41 - 2.01
+Sulphonylureas	1519	14423.537	Baseline
+	310	2132.5283	.8	.09388714	.64 - 1.01
