@@ -36,11 +36,6 @@ count
 * sum of events per individual 
 bysort indiv: egen fracturecount = total(nevent)
 
-* create variable for ever exposed to gli/su 
-
-bysort indiv: egen ever_gli = max(gli_exgr)
-bysort indiv: egen ever_su = max(su_exgr)
-
 * want to create a file with one row per patient for descriptions of chars 
 * keep other variables for FU and number of fractures already created 
 keep indiv fracturecount ever_* 

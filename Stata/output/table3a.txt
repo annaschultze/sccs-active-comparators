@@ -1,8 +1,8 @@
 Table 3: Active Comparator: Simple Ratio
 	Age-adjusted Rate Ratio	95%CI	Ratio of Ratio	95%CI automatic	95%CI manual
 UNADJUSTED
-Thiazolidinediones	2.35	2.02 - 2.74
-Sulphonylureas	1.23	.99 - 1.52	1.92	1.48 - 2.5	1.62 - 2.27
+Thiazolidinediones	2.23	1.93 - 2.58
+Sulphonylureas	1.08	.74 - 1.58	2.06	1.37 - 3.11	1.62 - 2.63
 ADJUSTED
-Thiazolidinediones	1.69	1.41 - 2.01
-Sulphonylureas	.8	.64 - 1.01	2.11	1.58 - 2.82	1.78 - 2.5
+Thiazolidinediones	1.5	1.25 - 1.8
+Sulphonylureas	.7	.47 - 1.05	2.14	1.37 - 3.33	1.68 - 2.72

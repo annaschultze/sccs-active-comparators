@@ -48,6 +48,7 @@ file write tablecontent (round(r(table)[5,2]),0.01) (" - ") (round(r(table)[6,2]
 
 file write tablecontent "Model 2: Exposure = Sulphonylureas" _tab 
 xtpoisson nevents i.su_exgr, fe i(indiv) offset(loginterval) irr 
+
 file write tablecontent _tab _tab (round(r(table)[1,2]),0.01) _tab 
 file write tablecontent (round(r(table)[5,2]),0.01) (" - ") (round(r(table)[6,2]),0.01) _n
 
@@ -77,6 +78,7 @@ file write tablecontent (round(r(table)[5,2]),0.01) (" - ") (round(r(table)[6,2]
 
 file write tablecontent "Model 2: Exposure = Sulphonylureas" _tab 
 xtpoisson nevents i.su_exgr i.agegr, fe i(indiv) offset(loginterval) irr 
+
 file write tablecontent _tab _tab (round(r(table)[1,2]),0.01) _tab 
 file write tablecontent (round(r(table)[5,2]),0.01) (" - ") (round(r(table)[6,2]),0.01) _n
 
