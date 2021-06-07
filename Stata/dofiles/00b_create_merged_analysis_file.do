@@ -8,8 +8,8 @@ VERSION:			 Stata 16.1
 DESCRIPTION OF FILE: This modifies code to create two interim datasets for SUL and
 					 GLI analyses. 
 					 These are then merged, and remaining data management done on this file. 				
-					 This - rather than simply appending datasets - is required 
-					 due to the age split. Where patients are exposed to say, 6 months 
+					 This - rather than simply appending datasets - is required to avoid duplication 
+					 of unexposed rows and due to the age split. Where patients are exposed to say, 6 months 
 					 of gli and 1 month of SU during a calendar year appending the datasets s
 					 will results in duplication of rows. To ensure these are split appropriately, 
 					 the split needs to occur after the exposure periods have been determined, 
@@ -92,10 +92,6 @@ sort pateid period_start1
 by pateid: gen count=_n
 by pateid: egen cutp2=max(period_end)
 
-* replace period end with end of FU (but construct exposure using period_end)
-* gen end_uts1 = end_uts - dob  
-* replace cutp2 = end_uts 
-
 *generate exposure group cutpoints
 gen drugstart=period_start if exposed==1
 by pateid: egen drugstart1 = max(drugstart)
@@ -157,9 +153,6 @@ drop if fracture_date==197232
 *drop fracture prior to regstart_12
 drop if fracture_date<=regstart_12
 
-* replace period end w. end of FU (option for FU)
-* replace period_end = end_uts
-
 *drop fractures post end exposure
 sort pateid exposed
 by pateid: egen max_end=max(period_end)
@@ -176,10 +169,6 @@ gen cutp1=regstart1
 sort pateid period_start
 by pateid: gen count=_n
 by pateid: egen cutp2=max(period_end)
-
-* replace period end with end of FU (but construct exposure using period_end) 
-* gen end_uts1 = end_uts - dob 
-* replace cutp2 = end_uts1
 
 *generate exposure group cutpoints
 gen drugstart=period_start if exposed==1
@@ -254,13 +243,13 @@ drop _merge
 
 gen flag = 1 if cutp60 != cutp2 & cutp60 != .
 
-* censor at initiation of the other drug, if already expsosed to one drug 
-replace cutp2 = cutp58 if cutp57 != . & cutp58 < cutp57  
-replace cutp2 = cutp56 if cutp60 != . & cutp56 < cutp60 
+* apply SU censoring dates if earlier 
+replace cutp2 = cutp60 if cutp60 < cutp2
 
-* censor at earliest discontinuation of any discontinuation 
-replace cutp60 = cutp2 if cutp2 < cutp60 & cutp60 != . 
-replace cutp57 = cutp2 if cutp2 < cutp57 & cutp57 != . 
+* censor at initiation of the other drug, if already expsosed to one drug 
+** censor at initiation of su if su started after initiation of gli
+replace cutp2 = cutp58 if cutp58 != . & cutp58 > cutp56 
+** su file alerady censored at gli initiation 
 
 * reshape eventday to long again 
 reshape long eventday, i(indiv) j(eventnumber)
@@ -388,6 +377,13 @@ drop if any_event == 0
 * create indicator variable for exposure to either drug 
 gen any = 1 if gli_exgr == 1 | su_exgr == 1 
 replace any = 0 if any == . 
+
+* create variable for ever exposed to gli/su 
+bysort indiv: egen ever_gli = max(gli_exgr)
+bysort indiv: egen ever_su = max(su_exgr)
+
+* drop if exposed to both (occurs only if start/stop dates exactly the same)
+drop if ever_gli == 1 & ever_su == 1 
 
 * output dataset
 save "$Datadir\merged_analysis_file", replace 

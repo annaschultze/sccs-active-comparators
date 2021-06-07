@@ -79,7 +79,7 @@ gen su_years = su_days/365.25
 by su_exgr: egen su_totalevents=total(nevents)
 by su_exgr: tab su_totalevents su_years
 
-* Unexposed row 
+* Unexposed row s
 summarize su_totalevents if su_exgr == 0 
 file write tablecontent (r(min)) _tab 
 
